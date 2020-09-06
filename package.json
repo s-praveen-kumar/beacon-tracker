@@ -1,0 +1,25 @@
+{
+  "name": "beacon-tracker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/s-praveen-kumar/beacon-tracker.git"
+  },
+  "author": "The_Kube",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/s-praveen-kumar/beacon-tracker/issues"
+  },
+  "homepage": "https://github.com/s-praveen-kumar/beacon-tracker#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
