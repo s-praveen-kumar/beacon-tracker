@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const checkPointSchema = mongoose.Schema({
-  id: mongoose.SchemaTypes.ObjectId,
   name: String,
   location: {
     lat: Number,
@@ -8,4 +7,4 @@ const checkPointSchema = mongoose.Schema({
   },
   authSecret: String,
 });
-mongoose.model("Checkpoint", checkPointSchema);
+module.exports = mongoose.model("Checkpoint", checkPointSchema);
