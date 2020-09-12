@@ -4,7 +4,7 @@ const app = express();
 const mongoose = require("mongoose");
 
 const Checkpoint = require("./models/checkpoint");
-
+const registerRouter = require("./routes/registerRouter");
 /******************Constants************/
 const PORT = process.env.PORT || 5000; //Use port defined in Environement variable PORT if defined or use 5000
 const DB_URI = "mongodb://localhost:27017/beaconDB";
@@ -19,10 +19,15 @@ mongoose.connect(
   }
 );
 
+app.use(express.json());
 app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
+app.use(registerRouter);
+
 app.listen(PORT, () => {
   console.log(`Server started on PORT ${PORT}`);
 });
+
+require("./tests/modelTest")();
