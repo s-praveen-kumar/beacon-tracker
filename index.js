@@ -3,7 +3,6 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 
-const Checkpoint = require("./models/checkpoint");
 const registerRouter = require("./routes/registerRouter");
 /******************Constants************/
 const PORT = process.env.PORT || 5000; //Use port defined in Environement variable PORT if defined or use 5000

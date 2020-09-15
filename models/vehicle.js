@@ -7,8 +7,7 @@ const vehicleSchema = mongoose.Schema({
   vehicleNo: String,
   contact: String,
   entryTime: { type: Date, default: Date.now },
-  routeSpec: {
-    path: [String],
-  },
+  routeSpec: [String],
+  journey: [{ checkPoint: String, reachedTime: Date }],
 });
 module.exports = mongoose.model("Vehicle", vehicleSchema);
