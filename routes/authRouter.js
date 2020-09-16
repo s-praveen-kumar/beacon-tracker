@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const bcrypt = require("bcrypt");
 const User = require("../models/user");
+const authHelper = require("../utils/authHelper");
 
 const SALT_ROUNDS = 10;
 
@@ -17,7 +18,13 @@ router.post("/login", (req, res) => {
           //User with given name found
           if (bcrypt.compareSync(req.body.password, user.hash)) {
             //Password matches
-            res.status(200).json({ success: true, msg: "Logged in" });
+            const authToken = authHelper.generateAccessToken({
+              username: user._id,
+              role: user.role,
+            });
+            res
+              .status(200)
+              .json({ success: true, msg: "Logged in", authToken });
           } else {
             //Password doesn't match
             res
@@ -40,6 +47,14 @@ router.post("/login", (req, res) => {
 });
 
 router.post("/createUser", (req, res) => {
+  authHelper.authHandler(req, res);
+  if (!req.body.authData) return;
+  if (req.body.authData.role != "admin") {
+    return res
+      .status(403)
+      .json({ success: false, msg: "Only admins can create users" });
+  }
+
   if (
     req.body.name &&
     req.body.username &&

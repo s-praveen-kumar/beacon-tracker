@@ -6,6 +6,7 @@ const bodyparser = require("body-parser");
 
 const registerRouter = require("./routes/registerRouter");
 const authRouter = require("./routes/authRouter");
+const authHelper = require("./utils/authHelper");
 /******************Constants************/
 const PORT = process.env.PORT || 3000; //Use port defined in Environement variable PORT if defined or use 5000
 const DB_URI = "mongodb://localhost:27017/beaconDB";
@@ -20,15 +21,20 @@ mongoose.connect(
   }
 );
 
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
   next();
 });
 
 app.use(bodyparser.json());
 
 app.use(authRouter);
+
+app.use(authHelper.authHandler);
 app.use(registerRouter);
 
 app.listen(PORT, () => {
