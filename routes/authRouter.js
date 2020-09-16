@@ -17,7 +17,7 @@ router.post("/login", (req, res) => {
           //User with given name found
           if (bcrypt.compareSync(req.body.password, user.hash)) {
             //Password matches
-            res.status(200).json({ sucess: true, msg: "Logged in" });
+            res.status(200).json({ success: true, msg: "Logged in" });
           } else {
             //Password doesn't match
             res
