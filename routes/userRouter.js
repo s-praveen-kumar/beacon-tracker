@@ -1,8 +1,11 @@
 const router = require("express").Router();
 const { urlencoded } = require("express");
 const User = require("../models/user");
+const authHelper = require("../utils/authHelper");
 
 router.get("/user", (req, res) => {
+    if (!authHelper.requireLogin(req, res))
+    return;
     User.findOne({ _id: req.body.authData.username }, (err, user) => {
         if (err) {
             res.status(500).json({ success: false, msg: err });

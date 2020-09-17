@@ -2,8 +2,11 @@ const router = require("express").Router();
 const Vehicle = require("../models/vehicle");
 const CheckPoint = require("../models/checkpoint");
 const Route = require("../models/route");
+const authHelper = require("../utils/authHelper");
 
 router.post("/registerVehicle", (req, res) => {
+  if (!authHelper.requireLogin(req, res))
+    return;
   //TODO: Validations
   if (
     req.body.aadharNo &&
@@ -45,6 +48,8 @@ router.post("/registerVehicle", (req, res) => {
 });
 
 router.post("/registerCheckpoint", (req, res) => {
+  if (!authHelper.requireLogin(req, res))
+    return;
   if (req.body.name && req.body.lat && req.body.lon && req.body.authSecret) {
     const checkPoint = new CheckPoint({
       name: req.body.name,
@@ -77,6 +82,8 @@ router.post("/registerCheckpoint", (req, res) => {
 module.exports = router;
 
 router.post("/registerRoute", (req, res) => {
+  if (!authHelper.requireLogin(req, res))
+    return;
   if (req.body.name && req.body.path) {
     const route = new Route({
       name: req.body.name,

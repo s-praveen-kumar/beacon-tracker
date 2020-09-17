@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const bcrypt = require("bcrypt");
 const User = require("../models/user");
+const { requireLogin } = require("../utils/authHelper");
 const authHelper = require("../utils/authHelper");
 
 const SALT_ROUNDS = 10;
@@ -47,8 +48,8 @@ router.post("/login", (req, res) => {
 });
 
 router.post("/createUser", (req, res) => {
-  authHelper.authHandler(req, res);
-  if (!req.body.authData) return;
+  if (!authHelper.requireLogin(req, res))
+    return;
   if (req.body.authData.role != "admin") {
     return res
       .status(403)

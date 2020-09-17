@@ -19,17 +19,32 @@ function validateToken(token) {
 function authHandler(req, res, next) {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
-  if (token == null)
-    return res
-      .status(401)
-      .json({ success: false, msg: "Need to be logged in" });
-  const data = validateToken(token);
-  if (!data) {
-    return res
-      .status(401)
-      .json({ success: false, msg: "Session expired or invalid. Login again" });
+  // if (token == null)
+  //   return res
+  //     .status(401)
+  //     .json({ success: false, msg: "Need to be logged in" });
+  // const data = validateToken(token);
+  // if (!data) {
+  //   return res
+  //     .status(401)
+  //     .json({ success: false, msg: "Session expired or invalid. Login again" });
+  // }
+  // req.body.authData = data;
+  // if (next) next();
+  if (token) {
+    const data = validateToken(token);
+    if (data)
+      req.body.authData = data;
   }
-  req.body.authData = data;
-  if (next) next();
+  if(next) next();
 }
-module.exports = { generateAccessToken, validateToken, authHandler };
+
+function requireLogin(req,res) {
+  if (req.body.authData)
+    return true;
+  else {
+    res.status(401).json({ success: false, msg: "Need to be logged in" });
+    return false;
+  }
+}
+module.exports = { generateAccessToken, validateToken, authHandler, requireLogin };
