@@ -4,7 +4,10 @@ const app = express();
 const mongoose = require("mongoose");
 const bodyparser = require("body-parser");
 
-const registerRouter = require("./routes/registerRouter");
+const checkpointRouter = require("./routes/checkpointRouter");
+const routeRouter = require("./routes/routeRouter");
+const vehicleRouter = require("./routes/vehicleRouter");
+
 const authRouter = require("./routes/authRouter");
 const userRouter = require("./routes/userRouter");
 const authHelper = require("./utils/authHelper");
@@ -38,8 +41,10 @@ app.use(authHelper.authHandler);
 
 app.use(authRouter);
 
-app.use(registerRouter);
-app.use(userRouter);
+app.use("/cp",checkpointRouter);
+app.use("/vehicle", vehicleRouter);
+app.use("/route", routeRouter);
+app.use("/user",userRouter);
 
 app.listen(PORT, () => {
   console.log(`Server started on PORT ${PORT}`);
