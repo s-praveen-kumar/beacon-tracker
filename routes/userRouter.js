@@ -2,6 +2,8 @@ const router = require("express").Router();
 const User = require("../models/user");
 const authHelper = require("../utils/authHelper");
 
+const SALT_ROUNDS = 10;
+
 router.get("/get", (req, res) => {
     if (!authHelper.requireLogin(req, res))
     return;

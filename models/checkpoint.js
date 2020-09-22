@@ -6,6 +6,6 @@ const checkPointSchema = mongoose.Schema({
     lon: Number,
   },
   authSecret: String,
-  roads: Map, //"Dest_ID" -> {distance, worst_case_time}
+//  roads: Map, //"Dest_ID" -> {distance, worst_case_time}
 });
 module.exports = mongoose.model("Checkpoint", checkPointSchema);

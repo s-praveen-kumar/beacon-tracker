@@ -1,10 +1,7 @@
 const router = require("express").Router();
 const bcrypt = require("bcrypt");
 const User = require("../models/user");
-const { requireLogin } = require("../utils/authHelper");
 const authHelper = require("../utils/authHelper");
-
-const SALT_ROUNDS = 10;
 
 router.post("/login", (req, res) => {
   if (req.body.username && req.body.password) {
