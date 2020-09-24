@@ -38,6 +38,7 @@ router.post("/register", (req, res) => {
         });
       }
     });
+
   } else {
     res
       .status(400)

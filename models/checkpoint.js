@@ -5,6 +5,7 @@ const checkPointSchema = mongoose.Schema({
     lat: Number,
     lon: Number,
   },
+	_id: String,
   authSecret: String,
 //  roads: Map, //"Dest_ID" -> {distance, worst_case_time}
 });

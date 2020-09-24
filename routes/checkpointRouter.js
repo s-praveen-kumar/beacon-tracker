@@ -2,12 +2,24 @@ const router = require("express").Router();
 const CheckPoint = require("../models/checkpoint");
 const authHelper = require("../utils/authHelper");
 
+router.get("/get", (req, res) => {
+  if (!authHelper.requireLogin(req, res))
+    return;
+    CheckPoint.find((err, cps) => {
+      if (err) {
+          res.status(500).json({ success: false, msg: err });
+      } else {
+          res.json({ success: true, checkpoints: cps });
+      }
+  })
+});
 
 router.post("/create", (req, res) => {
   if (!authHelper.requireLogin(req, res))
     return;
-  if (req.body.name && req.body.lat && req.body.lon && req.body.authSecret) {
+  if (req.body.name && req.body.id && req.body.lat && req.body.lon && req.body.authSecret) {
     const checkPoint = new CheckPoint({
+	    _id: req.body.id,
       name: req.body.name,
       location: { lat: req.body.lat, lon: req.body.lon },
       authSecret: req.body.authSecret,
