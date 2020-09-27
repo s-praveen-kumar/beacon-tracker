@@ -1,8 +1,9 @@
 const router = require("express").Router();
 const Vehicle = require("../models/vehicle");
+const Beacon = require("../models/beacon");
 const authHelper = require("../utils/authHelper");
 
-router.post("/register", (req, res) => {
+router.post("/register", async (req, res) => {
   if (!authHelper.requireLogin(req, res))
     return;
   //TODO: Validations
@@ -14,30 +15,48 @@ router.post("/register", (req, res) => {
     req.body.contact &&
     req.body.routeSpec
   ) {
-    const vehicle = new Vehicle({
+    let vehicle = new Vehicle({
       aadharNo: req.body.aadharNo,
       beaconId: req.body.beaconId,
       name: req.body.name,
       vehicleNo: req.body.vehicleNo,
       contact: req.body.contact,
       routeSpec: req.body.routeSpec,
+      journey: [{ checkpoint: req.body.routeSpec[0] }],
     });
     console.log("Vehicle registering :" + vehicle);
-    vehicle.save((err) => {
-      if (!err) {
-        console.log("SUCCESS");
+
+    try {
+      let beacon = await Beacon.findOne({ _id: req.body.beaconId });
+      if (!beacon) {
+        beacon = new Beacon({ _id: req.body.beaconId });
+        beacon = await beacon.save();
+      }
+
+      if (beacon.active) {
+        res
+      .status(400)
+      .json({ success: false, msg: "Beacon already in use" });
+        return;
+      }
+      vehicle = await vehicle.save();
+      beacon.currentVehicle = vehicle._id;
+      beacon.active = true;
+      beacon.lastCheckpoint = vehicle.routeSpec[0];
+      beacon = await beacon.save();
+
+      console.log("SUCCESS");
         res.json({
           success: true,
           msg: "Vehicle Registered",
         });
-      } else {
-        console.log(err);
-        res.status(500).json({
-          success: false,
-          msg: "Failed with error:" + err,
-        });
-      }
-    });
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({
+        success: false,
+        msg: "Failed with error:" + err,
+      });
+    }
 
   } else {
     res

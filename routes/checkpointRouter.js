@@ -5,7 +5,7 @@ const authHelper = require("../utils/authHelper");
 router.get("/get", (req, res) => {
   if (!authHelper.requireLogin(req, res))
     return;
-    CheckPoint.find((err, cps) => {
+  CheckPoint.find({},'-authSecret',(err, cps) => {
       if (err) {
           res.status(500).json({ success: false, msg: err });
       } else {
@@ -35,6 +35,13 @@ router.post("/create", (req, res) => {
         });
       } else {
         console.log(err);
+        if (err.code == 11000) {
+          //Duplicate key
+          return res.status(400).json({
+            success: false,
+            msg: "Checkpoint already exists",
+          });
+        }
         res.status(500).json({
           success: false,
           msg: "Failed with error:" + err,

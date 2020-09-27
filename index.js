@@ -7,6 +7,7 @@ const bodyparser = require("body-parser");
 const checkpointRouter = require("./routes/checkpointRouter");
 const routeRouter = require("./routes/routeRouter");
 const vehicleRouter = require("./routes/vehicleRouter");
+const trackingRouter = require("./routes/trackingRouter");
 
 const authRouter = require("./routes/authRouter");
 const userRouter = require("./routes/userRouter");
@@ -44,7 +45,8 @@ app.use(authRouter);
 app.use("/cp",checkpointRouter);
 app.use("/vehicle", vehicleRouter);
 app.use("/route", routeRouter);
-app.use("/user",userRouter);
+app.use("/user", userRouter);
+app.use(trackingRouter);
 
 app.listen(PORT, () => {
   console.log(`Server started on PORT ${PORT}`);
