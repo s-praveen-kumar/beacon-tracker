@@ -17,6 +17,11 @@ router.get("/get", (req, res) => {
 router.post("/create", (req, res) => {
   if (!authHelper.requireLogin(req, res))
     return;
+    if (req.body.authData.role != "admin") {
+      return res
+        .status(403)
+        .json({ success: false, msg: "Only admins can create checkpoints" });
+    }
   if (req.body.name && req.body.id && req.body.lat && req.body.lon && req.body.authSecret) {
     const checkPoint = new CheckPoint({
 	    _id: req.body.id,

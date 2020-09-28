@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const User = require("../models/user");
 const authHelper = require("../utils/authHelper");
+const bcrypt = require("bcrypt");
 
 const SALT_ROUNDS = 10;
 
