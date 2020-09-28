@@ -5,6 +5,7 @@ const vehicleSchema = mongoose.Schema({
   name: String,
   vehicleNo: String,
   contact: String,
+  routeId: String,
   entryTime: { type: Date, default: Date.now },
   routeSpec: [String],
   journey: [{ checkpoint: String, reachedTime: { type:Date, default: Date.now } }],

@@ -1,14 +1,35 @@
 const router = require("express").Router();
 const Route = require("../models/route");
 const authHelper = require("../utils/authHelper");
+const Checkpoint = require("../models/checkpoint");
+const fetch = require('node-fetch');
 
-router.post("/create", (req, res) => {
+const OSRM_SERVER = "https://routing.openstreetmap.de/routed-car";
+
+async function fetchOSRM(coordinates) {
+  const data = await fetch(
+    OSRM_SERVER +
+      `/route/v1/car/${coordinates}?steps=false&geometries=geojson&overview=full&continue_straight=true`
+  );
+  const res = await data.json();  return res.routes[0];
+}
+
+router.post("/create", async (req, res) => {
   if (!authHelper.requireLogin(req, res))
     return;
   if (req.body.name && req.body.path) {
+    let coordinates = "";
+    let checkPointArray = await Checkpoint.find({}, '-authSecret');
+    let checkpoints = new Map(checkPointArray.map((i) => [i._id, i]));
+    for (let cpId of req.body.path) {
+      const cp = checkpoints.get(cpId);
+      coordinates += cp.location.lon + "," + cp.location.lat + ";";
+    }
+
     const route = new Route({
       name: req.body.name,
       path: req.body.path,
+      route: await fetchOSRM(coordinates.slice(0,-1))
     });
     console.log("Registering new route: " + route);
     route.save((err) => {

@@ -13,6 +13,7 @@ router.post("/register", async (req, res) => {
     req.body.name &&
     req.body.vehicleNo &&
     req.body.contact &&
+    req.body.routeId &&
     req.body.routeSpec
   ) {
     let vehicle = new Vehicle({
@@ -21,6 +22,7 @@ router.post("/register", async (req, res) => {
       name: req.body.name,
       vehicleNo: req.body.vehicleNo,
       contact: req.body.contact,
+      routeId: req.body.routeId,
       routeSpec: req.body.routeSpec,
       journey: [{ checkpoint: req.body.routeSpec[0] }],
     });
