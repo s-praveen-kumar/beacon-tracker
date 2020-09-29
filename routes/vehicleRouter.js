@@ -2,6 +2,7 @@ const router = require("express").Router();
 const Vehicle = require("../models/vehicle");
 const Beacon = require("../models/beacon");
 const authHelper = require("../utils/authHelper");
+const sio = require("../utils/socket");
 
 router.post("/register", async (req, res) => {
   if (!authHelper.requireLogin(req, res))
@@ -52,6 +53,7 @@ router.post("/register", async (req, res) => {
           success: true,
           msg: "Vehicle Registered",
         });
+      sio.io().emit("newVehicle", vehicle);
     } catch (err) {
       console.log(err);
       res.status(500).json({

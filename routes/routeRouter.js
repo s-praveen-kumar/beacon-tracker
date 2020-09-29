@@ -2,7 +2,8 @@ const router = require("express").Router();
 const Route = require("../models/route");
 const authHelper = require("../utils/authHelper");
 const Checkpoint = require("../models/checkpoint");
-const fetch = require('node-fetch');
+const fetch = require("node-fetch");
+const sio = require("../utils/socket")
 
 const OSRM_SERVER = "https://routing.openstreetmap.de/routed-car";
 
@@ -39,6 +40,7 @@ router.post("/create", async (req, res) => {
           success: true,
           msg: "New route Registered",
         });
+        sio.io().emit("reload");
       } else {
         console.log(err);
         res.status(500).json({

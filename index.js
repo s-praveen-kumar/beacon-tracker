@@ -3,6 +3,7 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const bodyparser = require("body-parser");
+const socketio = require("./utils/socket");
 
 const checkpointRouter = require("./routes/checkpointRouter");
 const routeRouter = require("./routes/routeRouter");
@@ -26,6 +27,12 @@ mongoose.connect(
   }
 );
 
+const server = app.listen(PORT, () => {
+  console.log(`Server started on PORT ${PORT}`);
+});
+
+socketio.init(server);
+
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "http://127.0.0.1:5000");
   res.header(
@@ -47,7 +54,3 @@ app.use("/vehicle", vehicleRouter);
 app.use("/route", routeRouter);
 app.use("/user", userRouter);
 app.use(trackingRouter);
-
-app.listen(PORT, () => {
-  console.log(`Server started on PORT ${PORT}`);
-});

@@ -3,6 +3,7 @@ const Beacon = require("../models/beacon");
 const Vehicle = require("../models/vehicle");
 const Checkpoint = require("../models/checkpoint");
 const authHelper = require("../utils/authHelper");
+const sio = require("../utils/socket");
 
 router.post("/track", async (req, res) => {
     try {
@@ -25,6 +26,7 @@ router.post("/track", async (req, res) => {
                 await vehicle.save();
                 await beacon.save();
                 res.json({ success: true, msg: "OK" });
+                sio.io().emit("track", { vehicleId: vehicle._id , journey: vehicle.journey});
             }
         } else {
             res

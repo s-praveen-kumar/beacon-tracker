@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const CheckPoint = require("../models/checkpoint");
 const authHelper = require("../utils/authHelper");
+const sio = require("../utils/socket");
 
 router.get("/get", (req, res) => {
   if (!authHelper.requireLogin(req, res))
@@ -51,6 +52,7 @@ router.post("/create", (req, res) => {
           success: false,
           msg: "Failed with error:" + err,
         });
+        sio.io().emit("reload");
       }
     });
   } else {
