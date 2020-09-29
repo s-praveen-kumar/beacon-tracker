@@ -9,7 +9,7 @@ const checkpointRouter = require("./routes/checkpointRouter");
 const routeRouter = require("./routes/routeRouter");
 const vehicleRouter = require("./routes/vehicleRouter");
 const trackingRouter = require("./routes/trackingRouter");
-
+const testRouter = require("./routes/testRouter");
 const authRouter = require("./routes/authRouter");
 const userRouter = require("./routes/userRouter");
 const authHelper = require("./utils/authHelper");
@@ -53,4 +53,5 @@ app.use("/cp",checkpointRouter);
 app.use("/vehicle", vehicleRouter);
 app.use("/route", routeRouter);
 app.use("/user", userRouter);
+app.use("/test", testRouter);
 app.use(trackingRouter);
